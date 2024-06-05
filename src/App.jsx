@@ -1,165 +1,28 @@
 import './index.css'
 
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import { useState, useEffect, useRef } from 'react'
+import BlogList from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 
 import blogService from './services/blogs'
 import loginService from './services/loginService'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  // login
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  // pop a toast
   const [noti, setNoti] = useState({ message: null, type: null })
 
-  const popToast = (message, type) => {
-    setNoti({ message, type })
-    setTimeout(() => {
-      setNoti({ message: null, type: null })
-    }, 5000)
-  }
-
-  const LoginForm = ({ setUser }) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-  
-    const handleLogin = async (event) => {
-      event.preventDefault()
-      
-      try {
-        const user = await loginService.login({ username, password })
-        console.log('user: ', user)
-        setUser(user)
-        window.localStorage.setItem('loggedUser', JSON.stringify(user))
-        setUsername('')
-        setPassword('')
-        // popToast('logged in')
-      } catch (error) {
-        // throw Error('Wrong credentials')
-        popToast('wrong username or password', 'error')
-      } 
-    }
-  
-    return (
-      <>
-        <h3>Login</h3>
-        <form
-          title='Login'
-          style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '240px' }}
-          onSubmit={handleLogin}
-        >
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-            <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px'}}>
-              Username
-            </p>
-            <input
-              style={{ width: '100%' }}
-              onChange={({ target }) => setUsername(target.value)}
-              value={ username }
-            />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-            <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-              Password
-            </p>
-            <input
-              style={{ width: '100%' }}
-              onChange={({ target }) => setPassword(target.value)}
-              value={ password }
-            />
-          </div>
-          <button type='submit' style={{ alignSelf: 'flex-end' }}>Login</button>
-        </form>
-      </>
-    )
-  }
-
-  const NewBlogForm = ({ setBlogs }) => {
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
-  
-    const loadBlogs = async () => {
-      console.log('load blogs')
-      setBlogs(await blogService.getAll()) 
-    }
-  
-    const handleCreate = async (event) => {
-      event.preventDefault()
-  
-      try {
-        await blogService.create({
-          title,
-          author,
-          url,
-        })
-        await loadBlogs()
-  
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-        popToast(`new blog ${title} by ${author} added`, 'success')
-      } catch (error) {
-        popToast(`error occurred`, 'error')
-      }
-    }
-  
-    return (
-      <>
-        <h3>Create New</h3>
-        <form
-          title='new-blog'
-          style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '240px' }}
-          onSubmit={handleCreate}
-        >
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-            <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px'}}>
-              Title:
-            </p>
-            <input
-              style={{ width: '100%' }}
-              onChange={({ target }) => setTitle(target.value)}
-              value={ title }
-            />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-            <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-              Author:
-            </p>
-            <input
-              style={{ width: '100%' }}
-              onChange={({ target }) => setAuthor(target.value)}
-              value={ author }
-            />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-            <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-              Url:
-            </p>
-            <input
-              style={{ width: '100%' }}
-              onChange={({ target }) => setUrl(target.value)}
-              value={ url }
-            />
-          </div>
-          <button type='submit' style={{ alignSelf: 'flex-end' }}>create</button>
-        </form>
-      </>
-    )
-  }
-
-
-
-  const loadBlogs = async () => {
-    console.log('load blogs')
-    setBlogs(await blogService.getAll()) 
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-    popToast(`${user.name} logged out successfully`, 'success')
-  }
+  const blogFormRef = useRef()
 
   useEffect(() => {
     loadBlogs()
@@ -173,6 +36,100 @@ const App = () => {
     }
   }, [])
 
+  const loadBlogs = async () => {
+    console.log('load blogs')
+    setBlogs(await blogService.getAll()) 
+  }
+
+  const loadBlogById = async (id) => {
+    console.log('load blog by id')
+    const response = await blogService.getById(id)
+    setBlogs(blogs.map(n => {
+      if (n.id === id) {
+        return response
+      } else {
+        return n
+      }
+    }))
+  }
+
+  const handleLike = async (blog) => {
+    try {
+      await blogService.update(blog.id, {
+        user: blog.user.id,
+        likes: blog.likes +1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url
+      })
+      await loadBlogById(blog.id)
+    } catch (error) {
+      popToast(error.message, 'error')
+    } 
+  }
+
+  const handleDelete = async (blog) => {
+    try {
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        await blogService.deleteById(blog.id)
+        await loadBlogs()
+      }
+    } catch (error) {
+      // console.log(error)
+      popToast(error.message, 'error')
+    } 
+  }
+
+  const popToast = (message, type) => {
+    setNoti({ message, type })
+    setTimeout(() => {
+      setNoti({ message: null, type: null })
+    }, 5000)
+  }
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    
+    try {
+      const user = await loginService.login({ username, password })
+      console.log('user: ', user)
+      setUser(user)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      setUsername('')
+      setPassword('')
+      // popToast('logged in')
+    } catch (error) {
+      popToast('wrong username or password', 'error')
+    } 
+  }
+
+  const handleAddBlog = async (event) => {
+    event.preventDefault()
+
+    try {
+      await blogService.create({
+        title,
+        author,
+        url,
+      })
+      await loadBlogs()
+
+      blogFormRef.current.toggleVisibility()
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      popToast(`new blog ${title} by ${author} added`, 'success')
+    } catch (error) {
+      popToast(`error occurred`, 'error')
+    }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
+    popToast(`${user.name} logged out successfully`, 'success')
+  }
 
   return (
     <div>
@@ -186,14 +143,30 @@ const App = () => {
                 <button onClick={handleLogout}>log out</button>
               </p>
             </div>
-            <NewBlogForm setBlogs={setBlogs}/>
-            <h2>blogs</h2>
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
+            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+              <BlogForm handleSubmit={handleAddBlog}
+                handleTitleChange={({target}) => {setTitle(target.value)}}
+                handleAuthorChange={({target}) => {setAuthor(target.value)}}
+                handleUrlChange={({target}) => {setUrl(target.value)}}
+                title={ title }
+                author={ author }
+                url={ url }
+              />
+            </Togglable>
+            <BlogList
+              blogs={ blogs.sort((a, b) => a.likes - b.likes) }
+              handleLike={handleLike}
+              handleDelete={handleDelete}
+            />
           </>
         :
-          <LoginForm setUser={setUser}/>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
       }
     </div>
   )
