@@ -38,7 +38,7 @@ const App = () => {
 
   const loadBlogs = async () => {
     console.log('load blogs')
-    setBlogs(await blogService.getAll()) 
+    setBlogs(await blogService.getAll())
   }
 
   const loadBlogById = async (id) => {
@@ -65,7 +65,7 @@ const App = () => {
       await loadBlogById(blog.id)
     } catch (error) {
       popToast(error.message, 'error')
-    } 
+    }
   }
 
   const handleDelete = async (blog) => {
@@ -77,7 +77,7 @@ const App = () => {
     } catch (error) {
       // console.log(error)
       popToast(error.message, 'error')
-    } 
+    }
   }
 
   const popToast = (message, type) => {
@@ -89,7 +89,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({ username, password })
       console.log('user: ', user)
@@ -100,7 +100,7 @@ const App = () => {
       // popToast('logged in')
     } catch (error) {
       popToast('wrong username or password', 'error')
-    } 
+    }
   }
 
   const handleAddBlog = async (event) => {
@@ -121,7 +121,7 @@ const App = () => {
       setUrl('')
       popToast(`new blog ${title} by ${author} added`, 'success')
     } catch (error) {
-      popToast(`error occurred`, 'error')
+      popToast('error occurred', 'error')
     }
   }
 
@@ -145,9 +145,9 @@ const App = () => {
             </div>
             <Togglable buttonLabel='create new blog' ref={blogFormRef}>
               <BlogForm handleSubmit={handleAddBlog}
-                handleTitleChange={({target}) => {setTitle(target.value)}}
-                handleAuthorChange={({target}) => {setAuthor(target.value)}}
-                handleUrlChange={({target}) => {setUrl(target.value)}}
+                handleTitleChange={({ target }) => {setTitle(target.value)}}
+                handleAuthorChange={({ target }) => {setAuthor(target.value)}}
+                handleUrlChange={({ target }) => {setUrl(target.value)}}
                 title={ title }
                 author={ author }
                 url={ url }
@@ -159,14 +159,14 @@ const App = () => {
               handleDelete={handleDelete}
             />
           </>
-        :
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleSubmit={handleLogin}
-        />
+          :
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
       }
     </div>
   )

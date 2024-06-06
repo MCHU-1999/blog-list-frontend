@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const BlogForm = ({
   handleTitleChange,
@@ -9,7 +10,6 @@ const BlogForm = ({
   url,
   handleSubmit
 }) => {
-
   return (
     <>
       <h3>Create New</h3>
@@ -19,7 +19,7 @@ const BlogForm = ({
         onSubmit={ handleSubmit }
       >
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-          <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px'}}>
+          <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
             Title:
           </p>
           <input
@@ -53,5 +53,16 @@ const BlogForm = ({
     </>
   )
 }
+
+BlogForm.propTypes = {
+  handleTitleChange: PropTypes.func.isRequired,
+  handleAuthorChange: PropTypes.func.isRequired,
+  handleUrlChange: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+}
+
 
 export default BlogForm

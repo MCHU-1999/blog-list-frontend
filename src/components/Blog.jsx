@@ -19,7 +19,7 @@ const Blog = ({ blog, handleLike, handleDelete, verbose }) => {
     return (
       <div>
         {blog.title}, {blog.author}
-      </div>  
+      </div>
     )
   }
 }
@@ -53,6 +53,7 @@ const BlogToggle = forwardRef((props, refs) => {
     </div>
   )
 })
+BlogToggle.displayName = 'BlogToggle'
 
 const BlogList = ({ blogs, handleLike, handleDelete }) => {
   return (
