@@ -57,7 +57,7 @@ BlogToggle.displayName = 'BlogToggle'
 
 const BlogList = ({ blogs, handleLike, handleDelete }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className='blogList'>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
