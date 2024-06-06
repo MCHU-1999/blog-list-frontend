@@ -44,3 +44,20 @@ test('URL and number of likes are shown when the button clicked', async () => {
   expect(url).toBeDefined()
   expect(likes).toBeDefined()
 })
+
+test('click the like button twice', async () => {
+  const handleLike = vi.fn()
+  const handleDelete = vi.fn()
+
+  const { container } = render(<BlogList blogs={blogs} handleLike={handleLike} handleDelete={handleDelete} />)
+  // screen.debug()
+
+  const viewButton = screen.getByText('view')
+  await userEvent.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await userEvent.click(likeButton)
+  expect(handleLike.mock.calls.length).toBe(1)
+  await userEvent.click(likeButton)
+  expect(handleLike.mock.calls.length).toBe(2)
+})
