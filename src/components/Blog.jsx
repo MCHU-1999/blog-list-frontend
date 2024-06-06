@@ -61,7 +61,7 @@ const BlogList = ({ blogs, handleLike, handleDelete }) => {
       <h2>blogs</h2>
       {blogs.map(blog =>
         <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
-          <Blog blog={blog} handleLike={handleLike} handleDelete={handleDelete} verbose={true}/>
+          <Blog blog={blog} handleLike={handleLike} handleDelete={handleDelete} verbose={true} className='blogDetail'/>
         </BlogToggle>
       )}
     </div>
