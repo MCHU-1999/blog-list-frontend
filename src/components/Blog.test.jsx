@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { test, expect, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import BlogList from './Blog'
+import BlogForm from './BlogForm'
 
 
 const blogs = [{
@@ -60,4 +61,27 @@ test('click the like button twice', async () => {
   expect(handleLike.mock.calls.length).toBe(1)
   await userEvent.click(likeButton)
   expect(handleLike.mock.calls.length).toBe(2)
+})
+
+test('create new blog', async () => {
+  const handleSubmit = vi.fn(e => e.preventDefault())
+  const dumbHandle = vi.fn()
+
+  const { container } = render(
+    <BlogForm
+      handleSubmit={handleSubmit}
+      handleTitleChange={dumbHandle}
+      handleAuthorChange={dumbHandle}
+      handleUrlChange={dumbHandle}
+      title={blogs[0].title}
+      author={blogs[0].author}
+      url={blogs[0].url}
+    />
+  )
+  // screen.debug()
+
+  const createButton = screen.getByText('create')
+  await userEvent.click(createButton)
+  // console.log(handleSubmit.mock.calls)
+  expect(handleSubmit.mock.calls.length).toBe(1)
 })
