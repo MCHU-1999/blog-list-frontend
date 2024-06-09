@@ -22,6 +22,7 @@ const LoginForm = ({
             Username
           </p>
           <input
+            data-testid='username'
             style={{ width: '100%' }}
             onChange={ handleUsernameChange }
             value={ username }
@@ -32,6 +33,7 @@ const LoginForm = ({
             Password
           </p>
           <input
+            data-testid='password'
             style={{ width: '100%' }}
             onChange={ handlePasswordChange }
             value={ password }
