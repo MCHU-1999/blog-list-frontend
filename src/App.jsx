@@ -30,6 +30,7 @@ const App = () => {
     console.log('load user')
     const loggedUser = window.localStorage.getItem('loggedUser')
     if (loggedUser) {
+      console.log('logged-in!')
       const user = JSON.parse(loggedUser)
       setUser(user)
       blogService.setToken(user.token)
@@ -95,6 +96,7 @@ const App = () => {
       console.log('user: ', user)
       setUser(user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
       // popToast('logged in')
@@ -121,7 +123,7 @@ const App = () => {
       setUrl('')
       popToast(`new blog ${title} by ${author} added`, 'success')
     } catch (error) {
-      popToast('error occurred', 'error')
+      popToast('error occurred: ' + error.message, 'error')
     }
   }
 

@@ -6,9 +6,9 @@ const Blog = ({ blog, handleLike, handleDelete, verbose }) => {
   if (verbose) {
     return (
       <p style={{ margin: 0, padding: 12 }}>
-        {blog.url}
+        url: {blog.url}
         <br/>
-        {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
+        likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
         <br/>
         {blog.user.name}
         <br/>
