@@ -92,9 +92,14 @@ describe('Blog app', () => {
         await createBlogAndLike(page, 'blog no.2', 'blabla', 'http://002', 2)
         await createBlogAndLike(page, 'blog no.3', 'blablabla', 'http://003', 3)
         await createBlogAndLike(page, 'blog no.4', 'blablablabla', 'http://004', 4)
+        await page.goto('/')
       })
 
       test.only('blogs are arranged in the order according to its likes', async ({ page }) => {
+        const viewBtns = await page.getByRole('button', { name: 'view' }).all()
+        viewBtns.forEach(async (element) => {
+          await element.click()
+        })
         const elements = await page.getByText(/likes: (\d+)/).allTextContents()
         let c = 4
         elements.forEach(async (element) => {
@@ -102,6 +107,7 @@ describe('Blog app', () => {
           expect(match[1]).toBe(`${c}`)
           c-=1
         })
+        // page.screenshot()
       })
     })
   })

@@ -158,7 +158,8 @@ const App = () => {
             </Togglable>
             <BlogList
               user = { user }
-              blogs={ blogs.sort((a, b) => b.likes - a.likes) }
+              // blogs={ blogs.sort((a, b) => b.likes - a.likes) }
+              blogs={ blogs }
               handleLike={handleLike}
               handleDelete={handleDelete}
             />
