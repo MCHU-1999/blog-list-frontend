@@ -13,7 +13,19 @@ const createBlog = async (page, title, author, url) => {
   await textboxes[2].fill(url)
 
   await page.getByRole('button', { name: 'create' }).click()
+  await page.getByText(/new blog (.+) added/).waitFor({ state: 'visible' })
+}
+
+const createBlogAndLike = async (page, title, author, url, likes) => {
+  await createBlog(page, title, author, url)
+
+  const newBlogElement =  await page.getByText(`${title}, ${author}`).locator('../..')
+  await newBlogElement.getByRole('button', { name: 'view' }).click()
+  for (let i=0; i<likes; i++ ){
+    await newBlogElement.getByRole('button', { name: 'like' }).click()
+    await newBlogElement.getByText(`likes: ${i+1}`).waitFor({ state: 'visible' })
+  }
 }
 
 
-module.exports = { loginWith, createBlog }
+module.exports = { loginWith, createBlog, createBlogAndLike }

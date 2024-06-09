@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog } = require('./testHelper')
+const { loginWith, createBlog, createBlogAndLike } = require('./testHelper')
 const assert = require('assert')
 
 describe('Blog app', () => {
@@ -66,7 +66,6 @@ describe('Blog app', () => {
       })
 
       await createBlog(page, 'A Whole New Blog', 'admin', 'http://localhost:3003/example/blogs/1')
-      await page.getByText('new blog A Whole New Blog by admin added').waitFor({ state: 'visible' })
       await page.getByText('new blog A Whole New Blog by admin added').waitFor({ state: 'hidden' })
 
       const newBlogElement =  await page.getByText('A Whole New Blog, admin').locator('..')
@@ -85,6 +84,25 @@ describe('Blog app', () => {
       await newBlogElement.getByRole('button', { name: 'view' }).click()
       
       await expect(page.getByRole('button', { name: 'remove blog' })).toBeHidden()
+    })
+
+    describe('when there are multiple blogs',() => {
+      beforeEach(async ({ page }) => {
+        await createBlogAndLike(page, 'blog no.1', 'bla', 'http://001', 1)
+        await createBlogAndLike(page, 'blog no.2', 'blabla', 'http://002', 2)
+        await createBlogAndLike(page, 'blog no.3', 'blablabla', 'http://003', 3)
+        await createBlogAndLike(page, 'blog no.4', 'blablablabla', 'http://004', 4)
+      })
+
+      test.only('blogs are arranged in the order according to its likes', async ({ page }) => {
+        const elements = await page.getByText(/likes: (\d+)/).allTextContents()
+        let c = 4
+        elements.forEach(async (element) => {
+          const match = element.match(/likes: (\d+)/)
+          expect(match[1]).toBe(`${c}`)
+          c-=1
+        })
+      })
     })
   })
 })
