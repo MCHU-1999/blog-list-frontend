@@ -1,7 +1,7 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, handleLike, handleDelete, verbose }) => {
+const Blog = ({ user, blog, handleLike, handleDelete, verbose }) => {
 
   if (verbose) {
     return (
@@ -12,7 +12,12 @@ const Blog = ({ blog, handleLike, handleDelete, verbose }) => {
         <br/>
         {blog.user.name}
         <br/>
-        <button onClick={() => handleDelete(blog)}>remove blog</button>
+        {
+          blog.user.id === user.id ?
+            <button onClick={() => handleDelete(blog)}>remove blog</button>
+            :
+            null
+        }
       </p>
     )
   } else {
@@ -55,13 +60,13 @@ const BlogToggle = forwardRef((props, refs) => {
 })
 BlogToggle.displayName = 'BlogToggle'
 
-const BlogList = ({ blogs, handleLike, handleDelete }) => {
+const BlogList = ({ user, blogs, handleLike, handleDelete }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className='blogList'>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
-          <Blog blog={blog} handleLike={handleLike} handleDelete={handleDelete} verbose={true} className='blogDetail'/>
+          <Blog user={user} blog={blog} handleLike={handleLike} handleDelete={handleDelete} verbose={true} className='blogDetail'/>
         </BlogToggle>
       )}
     </div>

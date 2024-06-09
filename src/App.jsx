@@ -74,6 +74,7 @@ const App = () => {
       if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
         await blogService.deleteById(blog.id)
         await loadBlogs()
+        popToast(`blog removed: ${blog.title}`, 'success')
       }
     } catch (error) {
       // console.log(error)
@@ -85,7 +86,7 @@ const App = () => {
     setNoti({ message, type })
     setTimeout(() => {
       setNoti({ message: null, type: null })
-    }, 5000)
+    }, 3000)
   }
 
   const handleLogin = async (event) => {
@@ -156,6 +157,7 @@ const App = () => {
               />
             </Togglable>
             <BlogList
+              user = { user }
               blogs={ blogs.sort((a, b) => a.likes - b.likes) }
               handleLike={handleLike}
               handleDelete={handleDelete}
