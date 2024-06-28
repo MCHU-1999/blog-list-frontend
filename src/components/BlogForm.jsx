@@ -20,8 +20,6 @@ const BlogForm = () => {
         author,
         url,
       }))
-      // dispatch(loadBlogs())
-      // blogFormRef.current.toggleVisibility()
 
       setTitle('')
       setAuthor('')
@@ -75,16 +73,6 @@ const BlogForm = () => {
     </>
   )
 }
-
-// BlogForm.propTypes = {
-//   handleTitleChange: PropTypes.func.isRequired,
-//   handleAuthorChange: PropTypes.func.isRequired,
-//   handleUrlChange: PropTypes.func.isRequired,
-//   title: PropTypes.string.isRequired,
-//   author: PropTypes.string.isRequired,
-//   url: PropTypes.string.isRequired,
-//   handleSubmit: PropTypes.func.isRequired,
-// }
 
 
 export default BlogForm
