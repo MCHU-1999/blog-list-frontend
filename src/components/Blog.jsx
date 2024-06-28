@@ -1,7 +1,34 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
-import blogService from '../services/blogs'
+import { useState, forwardRef, useImperativeHandle, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadBlogs, updateBlogById, deleteBlogById } from '../reducers/blogReducer'
+import { newNoti } from '../reducers/notificationReducer'
 
-const Blog = ({ user, blog, handleLike, handleDelete, verbose }) => {
+const Blog = ({ user, blog, verbose }) => {
+
+  const dispatch = useDispatch()
+  const handleLike = (blog) => {
+    try {
+      dispatch(updateBlogById(blog.id, {
+        ...blog,
+        user: blog.user.id,
+        likes: blog.likes +1,
+      }))
+      dispatch(newNoti(`you liked ${blog.title}`, 'default'))
+    } catch (error) {
+      dispatch(newNoti(error.message, 'error'))
+    }
+  }
+  const handleDelete = async (blog) => {
+    try {
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        dispatch(deleteBlogById(blog.id))
+        dispatch(newNoti(`blog removed: ${blog.title}`, 'success'))
+      }
+    } catch (error) {
+      // console.log(error)
+      dispatch(newNoti(error.message, 'error'))
+    }
+  }
 
   if (verbose) {
     return (
@@ -60,13 +87,16 @@ const BlogToggle = forwardRef((props, refs) => {
 })
 BlogToggle.displayName = 'BlogToggle'
 
-const BlogList = ({ user, blogs, handleLike, handleDelete }) => {
+const BlogList = ({ user }) => {
+
+  const blogs = useSelector(state => state.blogs)
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className='blogList'>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
-          <Blog user={user} blog={blog} handleLike={handleLike} handleDelete={handleDelete} verbose={true} className='blogDetail'/>
+          <Blog user={user} blog={blog} verbose={true} className='blogDetail'/>
         </BlogToggle>
       )}
     </div>
