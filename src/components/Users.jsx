@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import userService from '../services/userService'
-import { Routes, Route, useMatch, useParams } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 const User = ({ user }) => {
   if (!user) {
@@ -31,7 +31,6 @@ const Users = () => {
         setUsers(result)
         if (match) {
           setMatchUser(result.find(user => user.id === match.params.id))
-          // console.log('matchUser: ', result.find(user => user.id === match.params.id))
         } else {
           setMatchUser(null)
         }

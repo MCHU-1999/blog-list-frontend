@@ -5,6 +5,7 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Users from './components/Users'
+import BlogView from './components/BlogView'
 
 // helper functions
 import blogService from './services/blogs'
@@ -33,7 +34,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const user = useSelector(state => state.user)
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     dispatch(loadBlogs())
@@ -41,7 +42,6 @@ const App = () => {
     console.log('load user')
     const loggedUser = window.localStorage.getItem('loggedUser')
     if (loggedUser) {
-      console.log('logged-in!')
       const user = JSON.parse(loggedUser)
       dispatch(login(user))
       blogService.setToken(user.token)
@@ -62,13 +62,14 @@ const App = () => {
       {
         user ?
           <div>
+            <h2>Blogs</h2>
             <p>
               {user.name} logged-in
               <button onClick={handleLogout}>log out</button>
             </p>
             <Routes>
+              <Route path='/blogs/*' element={<BlogView user={user} />} />
               <Route path='/users/*' element={<Users />} />
-              {/* <Route path='/users/:id' element={<User />} /> */}
               <Route path='/' element={
                 <>
                   <Togglable buttonLabel='create new blog'>

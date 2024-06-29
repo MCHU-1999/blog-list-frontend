@@ -92,13 +92,14 @@ const BlogList = ({ user }) => {
   const blogs = useSelector(state => state.blogs)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className='blogList'>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
-          <Blog user={user} blog={blog} verbose={true} className='blogDetail'/>
-        </BlogToggle>
-      )}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }} className='blogList'>
+      {
+        blogs.map(blog =>
+          <BlogToggle key={blog.id} blog={blog} buttonLabel='view'>
+            <Blog user={user} blog={blog} verbose={true} className='blogDetail'/>
+          </BlogToggle>
+        )
+      }
     </div>
   )
 }

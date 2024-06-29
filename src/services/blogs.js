@@ -4,7 +4,7 @@ let token = null
 
 
 const setToken = newToken => {
-  console.log('new token set: ', newToken)
+  // console.log('new token set: ', newToken)
   token = `Bearer ${newToken}`
 }
 
