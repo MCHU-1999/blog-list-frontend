@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import userService from '../services/userService'
 import { Routes, Route, useMatch } from 'react-router-dom'
+import { Link, Table } from '@radix-ui/themes'
 
 const User = ({ user }) => {
   if (!user) {
@@ -10,9 +11,7 @@ const User = ({ user }) => {
     <>
       <h2>{user.name}</h2>
       <ul>
-        {
-          user.blogs.map(blog => (<li key={blog.id}>{blog.title}</li>))
-        }
+        { user.blogs.map(blog => (<li key={blog.id}>{blog.title}</li>)) }
       </ul>
     </>
   )
@@ -44,26 +43,27 @@ const Users = () => {
       <Route path='/' element={
         <>
           <h2>Users</h2>
-          <table>
-            <thead>
-              <tr>
-                <th> </th>
-                <th>blogs created</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root size='2' style={{ width: '400px' }}>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>name</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>blogs created</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
               {
                 users.map(user => {
                   return (
-                    <tr key={user.id}>
-                      <td><a href={`/users/${user.id}`}>{user.name}</a></td>
-                      <td>{user.blogs.length}</td>
-                    </tr>
+                    <Table.Row key={user.id}>
+                      <Table.Cell><Link href={`/users/${user.id}`}>{user.name}</Link></Table.Cell>
+                      <Table.Cell>{user.blogs.length}</Table.Cell>
+                    </Table.Row>
                   )
                 })
               }
-            </tbody>
-          </table>
+            </Table.Body>
+          </Table.Root>
         </>
       } />
     </Routes>

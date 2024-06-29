@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { newNoti } from '../reducers/notificationReducer'
 import { loadBlogs, newBlog } from '../reducers/blogReducer'
 // import { useNavigate } from 'react-router-dom'
+import { Button, TextField } from '@radix-ui/themes'
 
 const BlogForm = () => {
   const [title, setTitle] = useState('')
@@ -39,37 +40,10 @@ const BlogForm = () => {
         style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '240px' }}
         onSubmit={ handleAddBlog }
       >
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-          <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-            Title:
-          </p>
-          <input
-            style={{ width: '100%' }}
-            onChange={ ({ target }) => {setTitle(target.value)} }
-            value={ title }
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-          <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-            Author:
-          </p>
-          <input
-            style={{ width: '100%' }}
-            onChange={ ({ target }) => {setAuthor(target.value)} }
-            value={ author }
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '20px', gap: '4px', alignItems: 'center' }}>
-          <p style={{ color:'GrayText', fontSize: 12, minWidth: '60px' }}>
-            Url:
-          </p>
-          <input
-            style={{ width: '100%' }}
-            onChange={ ({ target }) => {setUrl(target.value)} }
-            value={ url }
-          />
-        </div>
-        <button type='submit' style={{ alignSelf: 'flex-end' }}>create</button>
+        <TextField.Root placeholder="Title" onChange={ ({ target }) => {setTitle(target.value)} } value={ title } />
+        <TextField.Root placeholder="Author" onChange={ ({ target }) => {setAuthor(target.value)} } value={ author } />
+        <TextField.Root placeholder="URL" onChange={ ({ target }) => {setUrl(target.value)} } value={ url } />
+        <Button type='submit' style={{ alignSelf: 'flex-end' }}>create</Button>
       </form>
     </>
   )

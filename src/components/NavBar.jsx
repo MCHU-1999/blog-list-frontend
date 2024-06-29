@@ -1,21 +1,12 @@
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer'
 import { newNoti } from '../reducers/notificationReducer'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { Button, Link, TabNav, Text } from '@radix-ui/themes'
 
 const NavBar = ({ user }) => {
-  const style = {
-    display: 'flex',
-    margin: '12px 0px',
-    padding: '8px',
-    gap: '16px',
-    backgroundColor: '#dddddd',
-    borderRadius: 8
-  }
-
-  const btnStyle = {
-    padding: '0px'
-  }
+  const location = useLocation()
+  // console.log(location.pathname)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -27,19 +18,19 @@ const NavBar = ({ user }) => {
   }
 
   return (
-    <div style={style} >
-      <button onClick={() => navigate(-1)}>back</button>
-      <a style={btnStyle} href="/blogs">blogs</a>
-      <a style={btnStyle} href="/users">users</a>
+    <TabNav.Root style={{ padding: '8px 12px' }}>
+      <TabNav.Link href='/blogs' active={location.pathname === '/blogs'}>blogs</TabNav.Link>
+      <TabNav.Link href='/users' active={location.pathname === '/users'}>users</TabNav.Link>
       {
         user ?
-          <p style={{ margin: 0, alignContent: 'center' }}>
-            {user.name} logged-in <button onClick={handleLogout}>log out</button>
-          </p>
+          <div style={{ width: '100%', textAlign: 'end' }}>
+            <Text align='center'>{user.name} logged-in </Text>
+            <Button onClick={handleLogout}>log out</Button>
+          </div>
           :
           null
       }
-    </div>
+    </TabNav.Root>
   )
 }
 

@@ -49,8 +49,7 @@ const App = () => {
       <Notification />
       {
         user ?
-          <div>
-            <h2>Blogs</h2>
+          <div style={{ margin: 12 }}>
             <Routes>
               <Route path='/blogs/*' element={<BlogView user={user} />} />
               <Route path='/users/*' element={<Users />} />
