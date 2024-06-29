@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
-import BlogList from './components/BlogList'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
 import Users from './components/Users'
 import BlogView from './components/BlogView'
 import NavBar from './components/NavBar'
 
 // helper functions
-import blogService from './services/blogs'
+import blogService from './services/blogService'
 import loginService from './services/loginService'
 
 // reducers & dispatch
@@ -57,14 +54,6 @@ const App = () => {
             <Routes>
               <Route path='/blogs/*' element={<BlogView user={user} />} />
               <Route path='/users/*' element={<Users />} />
-              <Route path='/' element={
-                <>
-                  <Togglable buttonLabel='create new blog'>
-                    <BlogForm />
-                  </Togglable>
-                  <BlogList user = { user } />
-                </>
-              } />
             </Routes>
           </div>
           :

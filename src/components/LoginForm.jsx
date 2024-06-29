@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { login } from '../reducers/userReducer'
 import { useDispatch } from 'react-redux'
 import loginService from '../services/loginService'
-import blogService from '../services/blogs'
+import blogService from '../services/blogService'
 import { newNoti } from '../reducers/notificationReducer'
 
 const LoginForm = () => {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
+import blogService from '../services/blogService'
 import { useDispatch } from 'react-redux'
 import { newNoti } from '../reducers/notificationReducer'
 import { loadBlogs, newBlog } from '../reducers/blogReducer'
