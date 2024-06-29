@@ -21,6 +21,7 @@ const Notification = () => {
     height: '50px',
     maxHeight: '50px',
     overflow: 'scroll',
+    borderRadius: 8
   }
 
   return (

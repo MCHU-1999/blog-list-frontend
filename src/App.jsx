@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Users from './components/Users'
 import BlogView from './components/BlogView'
+import NavBar from './components/NavBar'
 
 // helper functions
 import blogService from './services/blogs'
@@ -24,9 +25,7 @@ import {
   Route,
   Link,
   Navigate,
-  useParams,
   useNavigate,
-  useMatch
 } from 'react-router-dom'
 
 
@@ -34,7 +33,6 @@ const App = () => {
   const dispatch = useDispatch()
 
   const user = useSelector(state => state.user)
-  // console.log(user)
 
   useEffect(() => {
     dispatch(loadBlogs())
@@ -48,25 +46,14 @@ const App = () => {
     }
   }, [])
 
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    dispatch(setUser({ user: null }))
-    dispatch(newNoti(`${user.name} logged out successfully`, 'success'))
-  }
-
-
   return (
     <div>
+      <NavBar user={user}/>
       <Notification />
       {
         user ?
           <div>
             <h2>Blogs</h2>
-            <p>
-              {user.name} logged-in
-              <button onClick={handleLogout}>log out</button>
-            </p>
             <Routes>
               <Route path='/blogs/*' element={<BlogView user={user} />} />
               <Route path='/users/*' element={<Users />} />
