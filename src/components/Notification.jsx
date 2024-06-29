@@ -25,7 +25,7 @@ const Notification = () => {
     display: 'flex',
     margin: 12,
     border: 'solid',
-    padding: 10,
+    padding: 4,
     borderWidth: 1,
     height: '50px',
     maxHeight: '50px',
