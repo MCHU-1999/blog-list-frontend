@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
-import blogService from '../services/blogService'
 import { useDispatch } from 'react-redux'
 import { newNoti } from '../reducers/notificationReducer'
 import { loadBlogs, newBlog } from '../reducers/blogReducer'
+// import { useNavigate } from 'react-router-dom'
 
 const BlogForm = () => {
   const [title, setTitle] = useState('')
@@ -11,6 +10,7 @@ const BlogForm = () => {
   const [url, setUrl] = useState('')
 
   const dispatch = useDispatch()
+  // const navigate = useNavigate()
   const handleAddBlog = async (event) => {
     event.preventDefault()
 
@@ -25,6 +25,7 @@ const BlogForm = () => {
       setAuthor('')
       setUrl('')
       dispatch(newNoti(`new blog ${title} by ${author} added`, 'success'))
+      // navigate('/blogs')
     } catch (error) {
       dispatch(newNoti('error occurred: ' + error.message, 'error'))
     }

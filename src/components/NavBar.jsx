@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer'
 import { newNoti } from '../reducers/notificationReducer'
+import { useNavigate } from 'react-router-dom'
 
 const NavBar = ({ user }) => {
   const style = {
@@ -17,6 +18,7 @@ const NavBar = ({ user }) => {
   }
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -26,6 +28,7 @@ const NavBar = ({ user }) => {
 
   return (
     <div style={style} >
+      <button onClick={() => navigate(-1)}>back</button>
       <a style={btnStyle} href="/blogs">blogs</a>
       <a style={btnStyle} href="/users">users</a>
       {
